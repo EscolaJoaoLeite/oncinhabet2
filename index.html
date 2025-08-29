@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oncinha Bet - Plataforma Educativa</title>
-    <link rel="icon" type="image/x-icon" id="favicon" href="https://drive.google.com/file/d/1co1vho-3td8l4N4Q_isZ64quHgaXwzVc/view?usp=sharing' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐆</text></svg>">
+    <link rel="icon" type="image/x-icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐆</text></svg>">
     <style>
         * {
             margin: 0;
@@ -941,6 +941,34 @@
             margin-bottom: 10px;
         }
 
+        .loan-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .loan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .debt-indicator {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #ff6b6b;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -1062,6 +1090,23 @@
 
         <div class="balance">
             💰 Saldo: R$ <span id="balanceSelection">200</span>
+            <div id="loanSectionSelection" style="margin-top: 15px; display: none;">
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 10px;">
+                    <div style="font-size: 0.9rem; margin-bottom: 10px;">
+                        💳 <strong>Banco Oncinha</strong> - Empréstimo Rápido!<br>
+                        <small>Sem burocracia, aprovação instantânea!</small>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                        <button onclick="requestLoan(100)" class="loan-btn">R$ 100</button>
+                        <button onclick="requestLoan(250)" class="loan-btn">R$ 250</button>
+                        <button onclick="requestLoan(500)" class="loan-btn">R$ 500</button>
+                    </div>
+                    <div style="font-size: 0.8rem; margin-top: 8px; opacity: 0.9;">
+                        Taxa: 50% | Prazo: Imediato
+                    </div>
+                </div>
+            </div>
+            <div id="debtIndicatorSelection" style="display: none;"></div>
         </div>
 
         <!-- Navegação por Abas -->
@@ -1245,22 +1290,38 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="faviconUpload">Alterar Favicon:</label>
+                    <label for="faviconUpload">🔄 Alterar Favicon (Ícone da Aba):</label>
                     <input type="file" id="faviconUpload" class="file-input" accept="image/*" onchange="updateFavicon(event)">
                     <div class="upload-area" onclick="document.getElementById('faviconUpload').click()">
                         <p>📁 Clique para selecionar um novo favicon</p>
-                        <small>Formatos aceitos: PNG, JPG, ICO</small>
+                        <small>Formatos aceitos: PNG, JPG, ICO (16x16 ou 32x32 pixels)</small>
+                        <div style="margin-top: 10px;">
+                            <strong>Favicon atual:</strong> <img id="currentFavicon" src="" style="width: 16px; height: 16px; margin-left: 5px;">
+                        </div>
                     </div>
+                    <button type="button" onclick="resetFavicon()" style="margin-top: 10px; padding: 8px 15px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        🔄 Restaurar Favicon Padrão
+                    </button>
                 </div>
                 
                 <div class="form-group">
-                    <label for="mainLogoUpload">Alterar Logo Principal:</label>
+                    <label for="mainLogoUpload">🖼️ Alterar Logo Principal:</label>
                     <input type="file" id="mainLogoUpload" class="file-input" accept="image/png,image/jpeg,image/jpg" onchange="updateMainLogo(event)">
                     <div class="upload-area" onclick="document.getElementById('mainLogoUpload').click()">
                         <p>🖼️ Clique para selecionar uma nova logo</p>
-                        <small>Formatos aceitos: PNG, JPG (máx. 2MB)</small>
+                        <small>Formatos aceitos: PNG, JPG (máx. 2MB, recomendado: 200x200 pixels)</small>
+                        <div style="margin-top: 10px;">
+                            <strong>Logo atual:</strong>
+                            <div id="currentLogoDisplay" style="margin-top: 5px;">
+                                <span id="currentLogoEmoji">🐆</span>
+                                <img id="currentLogoImg" src="" style="display: none; width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                            </div>
+                        </div>
                     </div>
                     <img id="mainLogoPreview" class="logo-preview" style="display: none;">
+                    <button type="button" onclick="resetMainLogo()" style="margin-top: 10px; padding: 8px 15px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        🔄 Restaurar Logo Padrão (🐆)
+                    </button>
                 </div>
 
                 <button class="btn btn-primary" onclick="resetVisualSettings()">🔄 Restaurar Padrão</button>
@@ -1356,6 +1417,23 @@
 
         <div class="balance">
             💰 Saldo: R$ <span id="balance">200</span>
+            <div id="loanSection" style="margin-top: 15px; display: none;">
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 10px;">
+                    <div style="font-size: 0.9rem; margin-bottom: 10px;">
+                        💳 <strong>Banco Oncinha</strong> - Empréstimo Rápido!<br>
+                        <small>Sem burocracia, aprovação instantânea!</small>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                        <button onclick="requestLoan(100)" class="loan-btn">R$ 100</button>
+                        <button onclick="requestLoan(250)" class="loan-btn">R$ 250</button>
+                        <button onclick="requestLoan(500)" class="loan-btn">R$ 500</button>
+                    </div>
+                    <div style="font-size: 0.8rem; margin-top: 8px; opacity: 0.9;">
+                        Taxa: 50% | Prazo: Imediato
+                    </div>
+                </div>
+            </div>
+            <div id="debtIndicator" style="display: none;"></div>
         </div>
 
         <div class="slot-machine">
@@ -1650,7 +1728,9 @@
             totalGames: 0,
             wins: 0,
             losses: 0,
-            totalLost: 0
+            totalLost: 0,
+            totalDebt: 0,
+            loanCount: 0
         };
 
         // Lista de influenciadores do projeto
@@ -1761,6 +1841,79 @@
             document.getElementById('winRateStats').textContent = winPercentage + '%';
         }
 
+        // ===== SISTEMA DE EMPRÉSTIMOS =====
+        
+        function requestLoan(amount) {
+            // Mostrar mensagem de "aprovação" do empréstimo
+            const loanMessages = [
+                "🎉 Parabéns! Seu empréstimo foi PRÉ-APROVADO!",
+                "✅ Crédito liberado instantaneamente!",
+                "💰 Dinheiro na conta em segundos!",
+                "🚀 Aprovação automática - Sem consulta ao SPC!"
+            ];
+            
+            const randomMessage = loanMessages[Math.floor(Math.random() * loanMessages.length)];
+            
+            if (confirm(`${randomMessage}\n\nEmpréstimo: R$ ${amount}\nTaxa de juros: 50%\nValor a pagar: R$ ${amount * 1.5}\n\nConfirma o empréstimo?`)) {
+                // Adicionar dinheiro ao saldo
+                gameStats.balance += amount;
+                gameStats.totalDebt += amount * 1.5; // Juros de 50%
+                gameStats.loanCount++;
+                
+                // Atualizar displays
+                updateStats();
+                updateDebtDisplay();
+                
+                // Mostrar mensagem de sucesso
+                alert(`💳 Empréstimo aprovado!\nR$ ${amount} foi adicionado ao seu saldo.\nDívida total: R$ ${gameStats.totalDebt}`);
+                
+                // Esconder seção de empréstimo temporariamente
+                document.getElementById('loanSection').style.display = 'none';
+                document.getElementById('loanSectionSelection').style.display = 'none';
+                
+                // Mostrar novamente após 30 segundos (simulando "nova oferta")
+                setTimeout(() => {
+                    if (gameStats.balance < 50) {
+                        document.getElementById('loanSection').style.display = 'block';
+                        document.getElementById('loanSectionSelection').style.display = 'block';
+                    }
+                }, 30000);
+            }
+        }
+        
+        function updateDebtDisplay() {
+            const debtIndicators = ['debtIndicator', 'debtIndicatorSelection'];
+            
+            debtIndicators.forEach(indicatorId => {
+                const indicator = document.getElementById(indicatorId);
+                if (gameStats.totalDebt > 0) {
+                    indicator.style.display = 'block';
+                    indicator.className = 'debt-indicator';
+                    indicator.innerHTML = `
+                        <strong>⚠️ DÍVIDA ATIVA</strong><br>
+                        💳 Total devido: R$ ${gameStats.totalDebt}<br>
+                        📊 Empréstimos: ${gameStats.loanCount}<br>
+                        <small>Juros acumulando diariamente...</small>
+                    `;
+                } else {
+                    indicator.style.display = 'none';
+                }
+            });
+        }
+        
+        function checkLoanEligibility() {
+            // Mostrar opção de empréstimo quando saldo for baixo
+            if (gameStats.balance < 20) {
+                document.getElementById('loanSection').style.display = 'block';
+                document.getElementById('loanSectionSelection').style.display = 'block';
+            } else {
+                document.getElementById('loanSection').style.display = 'none';
+                document.getElementById('loanSectionSelection').style.display = 'none';
+            }
+        }
+
+        // ===== SISTEMA DE LOGOS E FAVICON =====
+        
         // Função para atualizar favicon
         function updateFavicon(event) {
             const file = event.target.files[0];
@@ -1769,9 +1922,52 @@
                 reader.onload = function(e) {
                     const favicon = document.getElementById('favicon');
                     favicon.href = e.target.result;
+                    
+                    // Atualizar preview no admin
+                    const currentFavicon = document.getElementById('currentFavicon');
+                    if (currentFavicon) {
+                        currentFavicon.src = e.target.result;
+                    }
+                    
+                    alert('✅ Favicon atualizado com sucesso!');
                 };
                 reader.readAsDataURL(file);
             }
+        }
+        
+        function resetFavicon() {
+            const defaultFavicon = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐆</text></svg>";
+            const favicon = document.getElementById('favicon');
+            favicon.href = defaultFavicon;
+            
+            const currentFavicon = document.getElementById('currentFavicon');
+            if (currentFavicon) {
+                currentFavicon.src = defaultFavicon;
+            }
+            
+            alert('✅ Favicon restaurado para o padrão!');
+        }
+        
+        function resetMainLogo() {
+            // Restaurar logo padrão (emoji)
+            updateAllLogos(null);
+            
+            // Limpar preview
+            const preview = document.getElementById('mainLogoPreview');
+            if (preview) {
+                preview.style.display = 'none';
+                preview.src = '';
+            }
+            
+            // Atualizar display atual no admin
+            const currentLogoImg = document.getElementById('currentLogoImg');
+            const currentLogoEmoji = document.getElementById('currentLogoEmoji');
+            if (currentLogoImg && currentLogoEmoji) {
+                currentLogoImg.style.display = 'none';
+                currentLogoEmoji.style.display = 'inline';
+            }
+            
+            alert('✅ Logo restaurada para o padrão (🐆)!');
         }
 
         // Função para atualizar logo principal
@@ -2067,6 +2263,18 @@
             
             const winPercentage = gameStats.totalGames > 0 ? ((gameStats.wins / gameStats.totalGames) * 100).toFixed(1) : 0;
             document.getElementById('winRate').textContent = winPercentage + '%';
+            
+            // Atualizar saldo na tela de seleção também
+            const balanceSelection = document.getElementById('balanceSelection');
+            if (balanceSelection) {
+                balanceSelection.textContent = gameStats.balance;
+            }
+            
+            // Verificar elegibilidade para empréstimo
+            checkLoanEligibility();
+            
+            // Atualizar indicador de dívida
+            updateDebtDisplay();
         }
 
         function updateWinRates() {
@@ -2085,11 +2293,13 @@
 
         function resetGame() {
             gameStats = {
-                balance: currentUserType === 'influencer' ? 500 : 200,
+                balance: currentUserType === 'influencer' ? 500 : currentUserType === 'admin' ? 1000 : 200,
                 totalGames: 0,
                 wins: 0,
                 losses: 0,
-                totalLost: 0
+                totalLost: 0,
+                totalDebt: 0,
+                loanCount: 0
             };
             
             updateStats();
@@ -2099,6 +2309,10 @@
             document.getElementById('slot1').textContent = '🐆';
             document.getElementById('slot2').textContent = '🚗';
             document.getElementById('slot3').textContent = '🏠';
+            
+            // Esconder seções de empréstimo
+            document.getElementById('loanSection').style.display = 'none';
+            document.getElementById('loanSectionSelection').style.display = 'none';
         }
 
         function logout() {
@@ -2122,7 +2336,9 @@
                 totalGames: 0,
                 wins: 0,
                 losses: 0,
-                totalLost: 0
+                totalLost: 0,
+                totalDebt: 0,
+                loanCount: 0
             };
             
             currentUserType = 'common';
@@ -2732,12 +2948,17 @@
             }, 3000);
         }
 
-        // ===== INICIALIZAÇÃO DO JOGO DE DADOS =====
+        // ===== INICIALIZAÇÃO =====
         // Inicializar configurações quando a página carregar
         document.addEventListener('DOMContentLoaded', function() {
-            // O jogo de dados não precisa de configurações especiais
-            // Apenas inicializar com o dado padrão
-            console.log('Jogo de Dados carregado - Probabilidades: Exato 16.67%, Maior/Menor 50%');
+            // Inicializar favicon atual no admin
+            const currentFavicon = document.getElementById('currentFavicon');
+            if (currentFavicon) {
+                const favicon = document.getElementById('favicon');
+                currentFavicon.src = favicon.href;
+            }
+            
+            console.log('Oncinha Bet carregado - Sistema de empréstimos ativo');
         });
 
         // Função para salvar informações do projeto
@@ -2854,5 +3075,5 @@
             e.target.value = value;
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976e69dd621ca18f',t:'MTc1NjQ5NTMwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976eb49471480357',t:'MTc1NjQ5ODM2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
