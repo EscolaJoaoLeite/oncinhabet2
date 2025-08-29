@@ -35,6 +35,9 @@
         .logo {
             font-size: 3rem;
             margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .title {
@@ -934,9 +937,9 @@
         }
 
         .custom-logo {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
+            width: 120px;
+            height: 80px;
+            border-radius: 10px;
             object-fit: cover;
             margin-bottom: 10px;
         }
@@ -1003,7 +1006,7 @@
     <!-- Tela de Login -->
     <div class="container" id="loginScreen">
         <div class="logo" id="mainLogo">
-            <img id="mainLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <img id="mainLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 120px; height: 80px; border-radius: 10px; object-fit: cover;">
             <span id="mainLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title">Oncinha Bet</h1>
@@ -1014,7 +1017,7 @@
             <p>Este é um projeto educativo que simula uma plataforma de apostas para fins pedagógicos.</p>
             <div class="checkbox-group">
                 <input type="checkbox" id="ageConfirm" required>
-                <label for="ageConfirm">Confirmo estar ciente que este é apenas um simulador educativo</label>
+                <label for="ageConfirm">Estou ciente e entendo que este é apenas um simulador educativo</label>
             </div>
         </div>
 
@@ -1082,7 +1085,7 @@
         <button class="logout-btn" onclick="logout()">Sair</button>
         
         <div class="logo" id="selectionLogo">
-            <img id="selectionLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <img id="selectionLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 120px; height: 80px; border-radius: 10px; object-fit: cover;">
             <span id="selectionLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title">Oncinha Bet</h1>
@@ -1314,7 +1317,7 @@
                             <strong>Logo atual:</strong>
                             <div id="currentLogoDisplay" style="margin-top: 5px;">
                                 <span id="currentLogoEmoji">🐆</span>
-                                <img id="currentLogoImg" src="" style="display: none; width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                <img id="currentLogoImg" src="" style="display: none; width: 80px; height: 50px; border-radius: 10px; object-fit: cover;">
                             </div>
                         </div>
                     </div>
@@ -1409,7 +1412,7 @@
         <button class="back-btn" onclick="backToSelection()">← Voltar</button>
         
         <div class="logo" id="gameLogo">
-            <img id="gameLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <img id="gameLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 120px; height: 80px; border-radius: 10px; object-fit: cover;">
             <span id="gameLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title" id="gameTitle">Oncinha Slots</h1>
@@ -1955,6 +1958,8 @@
 
         // ===== SISTEMA DE LOGOS E FAVICON =====
         
+        // ===== SISTEMA DE LOGOS E FAVICON =====
+        
         // Função para atualizar favicon
         function updateFavicon(event) {
             const file = event.target.files[0];
@@ -2001,6 +2006,12 @@
                 preview.src = '';
             }
             
+            // Limpar input de arquivo
+            const fileInput = document.getElementById('mainLogoUpload');
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            
             // Atualizar display atual no admin
             const currentLogoImg = document.getElementById('currentLogoImg');
             const currentLogoEmoji = document.getElementById('currentLogoEmoji');
@@ -2020,11 +2031,24 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const logoPreview = document.getElementById('mainLogoPreview');
-                    logoPreview.src = e.target.result;
-                    logoPreview.style.display = 'block';
+                    if (logoPreview) {
+                        logoPreview.src = e.target.result;
+                        logoPreview.style.display = 'block';
+                    }
                     
                     // Atualizar todas as logos na aplicação
                     updateAllLogos(e.target.result);
+                    
+                    // Atualizar display atual no admin
+                    const currentLogoImg = document.getElementById('currentLogoImg');
+                    const currentLogoEmoji = document.getElementById('currentLogoEmoji');
+                    if (currentLogoImg && currentLogoEmoji) {
+                        currentLogoImg.style.display = 'block';
+                        currentLogoImg.src = e.target.result;
+                        currentLogoEmoji.style.display = 'none';
+                    }
+                    
+                    alert('✅ Logo atualizada com sucesso!');
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -2044,6 +2068,17 @@
                     if (logoImg) {
                         logoImg.src = logoSrc;
                         logoImg.style.display = 'block';
+                        logoImg.onerror = function() {
+                            console.log('Erro ao carregar logo:', logoSrc);
+                            // Em caso de erro, usar emoji padrão
+                            this.style.display = 'none';
+                            const emojiId = logoId.replace('Img', 'Emoji');
+                            const emoji = document.getElementById(emojiId);
+                            if (emoji) {
+                                emoji.style.display = 'block';
+                                emoji.textContent = '🐆';
+                            }
+                        };
                     }
                 });
                 
@@ -2062,6 +2097,16 @@
                     if (logoImg) {
                         logoImg.src = defaultLogo;
                         logoImg.style.display = 'block';
+                        logoImg.onerror = function() {
+                            // Em caso de erro, usar emoji padrão
+                            this.style.display = 'none';
+                            const emojiId = logoId.replace('Img', 'Emoji');
+                            const emoji = document.getElementById(emojiId);
+                            if (emoji) {
+                                emoji.style.display = 'block';
+                                emoji.textContent = '🐆';
+                            }
+                        };
                     }
                 });
                 
@@ -2143,11 +2188,16 @@
                 gameStats.balance = 200;
             }
             
-            // Mostrar aba admin para administradores e influenciadores
+            // Mostrar aba admin APENAS para administradores
             const adminTabBtn = document.getElementById('adminTab');
-            if (adminTabBtn && (currentUserType === 'admin' || currentUserType === 'influencer')) {
-                adminTabBtn.style.display = 'block';
-                console.log('Aba Admin habilitada para:', user.name, '- Tipo:', currentUserType);
+            if (adminTabBtn) {
+                if (currentUserType === 'admin') {
+                    adminTabBtn.style.display = 'block';
+                    console.log('Aba Admin habilitada para administrador:', user.name);
+                } else {
+                    adminTabBtn.style.display = 'none';
+                    console.log('Aba Admin ocultada para usuário:', user.name, '- Tipo:', currentUserType);
+                }
             }
             
             const userDisplay = user.name + (currentUserType === 'influencer' ? ' ⭐' : '') + (currentUserType === 'admin' ? ' ⚙️' : '');
@@ -2411,16 +2461,19 @@
             document.getElementById('currentUser').textContent = userDisplay;
             document.getElementById('balance').textContent = gameStats.balance;
             
-            // Mostrar painel admin para administradores e influenciadores
+            // Mostrar painel admin APENAS para administradores
             const gameAdminPanel = document.getElementById('gameAdminPanel');
-            if (currentUserType === 'admin' || currentUserType === 'influencer') {
-                gameAdminPanel.style.display = 'block';
-                // Sincronizar valores
-                document.getElementById('gameWinRate').value = document.getElementById('selectionWinRate').value;
-                document.getElementById('gameInfluencerWinRate').value = document.getElementById('selectionInfluencerWinRate').value;
-                console.log('Painel Admin do jogo habilitado para influenciador:', currentUserType);
-            } else {
-                gameAdminPanel.style.display = 'none';
+            if (gameAdminPanel) {
+                if (currentUserType === 'admin') {
+                    gameAdminPanel.style.display = 'block';
+                    // Sincronizar valores
+                    document.getElementById('gameWinRate').value = document.getElementById('selectionWinRate').value;
+                    document.getElementById('gameInfluencerWinRate').value = document.getElementById('selectionInfluencerWinRate').value;
+                    console.log('Painel Admin do jogo habilitado para administrador');
+                } else {
+                    gameAdminPanel.style.display = 'none';
+                    console.log('Painel Admin do jogo ocultado para usuário tipo:', currentUserType);
+                }
             }
             
             // Mostrar jogo específico
@@ -2440,11 +2493,11 @@
             // Sincronizar saldo
             document.getElementById('balanceSelection').textContent = gameStats.balance;
             
-            // Sincronizar configurações do admin para administradores e influenciadores
-            if (currentUserType === 'admin' || currentUserType === 'influencer') {
+            // Sincronizar configurações do admin APENAS para administradores
+            if (currentUserType === 'admin') {
                 document.getElementById('selectionWinRate').value = document.getElementById('gameWinRate').value;
                 document.getElementById('selectionInfluencerWinRate').value = document.getElementById('gameInfluencerWinRate').value;
-                console.log('Configurações sincronizadas para:', currentUserType);
+                console.log('Configurações sincronizadas para administrador');
             }
             
             // Trocar telas
@@ -3001,6 +3054,12 @@
         // ===== INICIALIZAÇÃO =====
         // Inicializar configurações quando a página carregar
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Oncinha Bet carregado - Inicializando sistema...');
+            
+            // Inicializar todas as logos com a imagem padrão do GitHub
+            const defaultLogo = "https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png";
+            updateAllLogos(defaultLogo);
+            
             // Inicializar favicon atual no admin
             const currentFavicon = document.getElementById('currentFavicon');
             if (currentFavicon) {
@@ -3010,7 +3069,7 @@
             // Inicializar logo atual no admin
             const currentLogoImg = document.getElementById('currentLogoImg');
             if (currentLogoImg) {
-                currentLogoImg.src = "https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png";
+                currentLogoImg.src = defaultLogo;
                 currentLogoImg.style.display = 'block';
             }
             
@@ -3019,7 +3078,8 @@
                 currentLogoEmoji.style.display = 'none';
             }
             
-            console.log('Oncinha Bet carregado - Sistema de empréstimos ativo');
+            console.log('Sistema de logos e favicon inicializado');
+            console.log('Sistema de empréstimos ativo');
         });
 
         // Função para salvar informações do projeto
@@ -3136,5 +3196,5 @@
             e.target.value = value;
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976ee52f20cb1cf1',t:'MTc1NjUwMDM1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976f05aaf3271b21',t:'MTc1NjUwMTY5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
