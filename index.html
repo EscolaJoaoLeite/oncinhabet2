@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oncinha Bet - Plataforma Educativa</title>
-    <link rel="icon" type="image/x-icon" id="favicon" href="https://github.com/EscolaJoaoLeite/oncinhabet2/blob/main/Favicon2.png">
+    <link rel="icon" type="image/x-icon" id="favicon" href="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Favicon2.png">
     <style>
         * {
             margin: 0;
@@ -1003,7 +1003,7 @@
     <!-- Tela de Login -->
     <div class="container" id="loginScreen">
         <div class="logo" id="mainLogo">
-            <img id="mainLogoImg" src="https://github.com/EscolaJoaoLeite/oncinhabet2/blob/main/Logo2.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <img id="mainLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
             <span id="mainLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title">Oncinha Bet</h1>
@@ -1014,7 +1014,7 @@
             <p>Este é um projeto educativo que simula uma plataforma de apostas para fins pedagógicos.</p>
             <div class="checkbox-group">
                 <input type="checkbox" id="ageConfirm" required>
-                <label for="ageConfirm">Confirmo estar ciente que este é apenas um simulador educativo.</label>
+                <label for="ageConfirm">Confirmo estar ciente que este é apenas um simulador educativo</label>
             </div>
         </div>
 
@@ -1082,7 +1082,7 @@
         <button class="logout-btn" onclick="logout()">Sair</button>
         
         <div class="logo" id="selectionLogo">
-            <img id="selectionLogoImg" src="https://drive.google.com/uc?export=view&id=1eW8hFalhOS78ObZJEMrqoV4KHB0PLqNb" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <img id="selectionLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
             <span id="selectionLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title">Oncinha Bet</h1>
@@ -1409,7 +1409,7 @@
         <button class="back-btn" onclick="backToSelection()">← Voltar</button>
         
         <div class="logo" id="gameLogo">
-            <img id="gameLogoImg" src="https://drive.google.com/uc?export=view&id=1eW8hFalhOS78ObZJEMrqoV4KHB0PLqNb" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <img id="gameLogoImg" src="https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
             <span id="gameLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title" id="gameTitle">Oncinha Slots</h1>
@@ -1977,7 +1977,7 @@
         }
         
         function resetFavicon() {
-            const defaultFavicon = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐆</text></svg>";
+            const defaultFavicon = "https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Favicon2.png";
             const favicon = document.getElementById('favicon');
             favicon.href = defaultFavicon;
             
@@ -1990,8 +1990,9 @@
         }
         
         function resetMainLogo() {
-            // Restaurar logo padrão (emoji)
-            updateAllLogos(null);
+            // Restaurar logo padrão do GitHub
+            const defaultLogo = "https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png";
+            updateAllLogos(defaultLogo);
             
             // Limpar preview
             const preview = document.getElementById('mainLogoPreview');
@@ -2004,11 +2005,12 @@
             const currentLogoImg = document.getElementById('currentLogoImg');
             const currentLogoEmoji = document.getElementById('currentLogoEmoji');
             if (currentLogoImg && currentLogoEmoji) {
-                currentLogoImg.style.display = 'none';
-                currentLogoEmoji.style.display = 'inline';
+                currentLogoImg.style.display = 'block';
+                currentLogoImg.src = defaultLogo;
+                currentLogoEmoji.style.display = 'none';
             }
             
-            alert('✅ Logo restaurada para o padrão (🐆)!');
+            alert('✅ Logo restaurada para o padrão!');
         }
 
         // Função para atualizar logo principal
@@ -2036,7 +2038,7 @@
             const logoEmojis = ['mainLogoEmoji', 'selectionLogoEmoji', 'gameLogoEmoji'];
             
             if (logoSrc) {
-                // Mostrar imagem personalizada
+                // Mostrar imagem personalizada ou padrão
                 logoImages.forEach(logoId => {
                     const logoImg = document.getElementById(logoId);
                     if (logoImg) {
@@ -2053,18 +2055,20 @@
                     }
                 });
             } else {
-                // Mostrar emoji padrão
+                // Usar logo padrão do GitHub
+                const defaultLogo = "https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png";
                 logoImages.forEach(logoId => {
                     const logoImg = document.getElementById(logoId);
                     if (logoImg) {
-                        logoImg.style.display = 'none';
+                        logoImg.src = defaultLogo;
+                        logoImg.style.display = 'block';
                     }
                 });
                 
                 logoEmojis.forEach(emojiId => {
                     const emoji = document.getElementById(emojiId);
                     if (emoji) {
-                        emoji.style.display = 'block';
+                        emoji.style.display = 'none';
                     }
                 });
             }
@@ -3000,8 +3004,19 @@
             // Inicializar favicon atual no admin
             const currentFavicon = document.getElementById('currentFavicon');
             if (currentFavicon) {
-                const favicon = document.getElementById('favicon');
-                currentFavicon.src = favicon.href;
+                currentFavicon.src = "https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Favicon2.png";
+            }
+            
+            // Inicializar logo atual no admin
+            const currentLogoImg = document.getElementById('currentLogoImg');
+            if (currentLogoImg) {
+                currentLogoImg.src = "https://raw.githubusercontent.com/EscolaJoaoLeite/oncinhabet2/main/Logo2.png";
+                currentLogoImg.style.display = 'block';
+            }
+            
+            const currentLogoEmoji = document.getElementById('currentLogoEmoji');
+            if (currentLogoEmoji) {
+                currentLogoEmoji.style.display = 'none';
             }
             
             console.log('Oncinha Bet carregado - Sistema de empréstimos ativo');
@@ -3121,7 +3136,5 @@
             e.target.value = value;
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976eca9e16d786c5',t:'MTc1NjQ5OTI3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976ee52f20cb1cf1',t:'MTc1NjUwMDM1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
-
