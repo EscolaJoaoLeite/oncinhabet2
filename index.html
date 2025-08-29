@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oncinha Bet - Plataforma Educativa</title>
-    <link rel="icon" type="image/x-icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐆</text></svg>">
+    <link rel="icon" type="image/x-icon" id="favicon" href="https://drive.google.com/uc?export=view&id=1co1vho-3td8l4N4Q_isZ64quHgaXwzVc">
     <style>
         * {
             margin: 0;
@@ -1003,8 +1003,8 @@
     <!-- Tela de Login -->
     <div class="container" id="loginScreen">
         <div class="logo" id="mainLogo">
-            <img id="mainLogoImg" src="" style="display: none; width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
-            <span id="mainLogoEmoji">🐆</span>
+            <img id="mainLogoImg" src="https://drive.google.com/uc?export=view&id=1eW8hFalhOS78ObZJEMrqoV4KHB0PLqNb" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <span id="mainLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title">Oncinha Bet</h1>
         <p class="subtitle">Plataforma Educativa - Demonstração dos Riscos das Apostas</p>
@@ -1082,8 +1082,8 @@
         <button class="logout-btn" onclick="logout()">Sair</button>
         
         <div class="logo" id="selectionLogo">
-            <img id="selectionLogoImg" src="" style="display: none; width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
-            <span id="selectionLogoEmoji">🐆</span>
+            <img id="selectionLogoImg" src="https://drive.google.com/uc?export=view&id=1eW8hFalhOS78ObZJEMrqoV4KHB0PLqNb" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <span id="selectionLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title">Oncinha Bet</h1>
         <p class="subtitle">Usuário: <span id="currentUserSelection"></span></p>
@@ -1409,8 +1409,8 @@
         <button class="back-btn" onclick="backToSelection()">← Voltar</button>
         
         <div class="logo" id="gameLogo">
-            <img id="gameLogoImg" src="" style="display: none; width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
-            <span id="gameLogoEmoji">🐆</span>
+            <img id="gameLogoImg" src="https://drive.google.com/uc?export=view&id=1eW8hFalhOS78ObZJEMrqoV4KHB0PLqNb" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+            <span id="gameLogoEmoji" style="display: none;">🐆</span>
         </div>
         <h1 class="title" id="gameTitle">Oncinha Slots</h1>
         <p class="subtitle">Usuário: <span id="currentUser"></span></p>
@@ -1742,6 +1742,35 @@
             'Wellington Cesar de Oliveira'
         ];
 
+        // Usuários influenciadores específicos com acesso especial
+        const influencerUsers = {
+            'Aleida777bet': {
+                name: 'Aleida Lemos de Carvalho da Silva',
+                password: 'aleida123',
+                type: 'influencer'
+            },
+            'Emanuel777bet': {
+                name: 'Emanuel Rôa de Carvalho',
+                password: 'emanuel123',
+                type: 'influencer'
+            },
+            'Maysa777bet': {
+                name: 'Maysa de Ávila',
+                password: 'maysa123',
+                type: 'influencer'
+            },
+            'Matheus777bet': {
+                name: 'Matheus Felipe Fernandez da Conceição',
+                password: 'matheus123',
+                type: 'influencer'
+            },
+            'Wellington777bet': {
+                name: 'Wellington Cesar de Oliveira',
+                password: 'wellington123',
+                type: 'influencer'
+            }
+        };
+
         // Credenciais de administrador
         const adminCredentials = {
             login: 'admin',
@@ -1754,7 +1783,8 @@
                 name: 'Administrador Super',
                 password: 'jlb@1964',
                 type: 'admin'
-            }
+            },
+            ...influencerUsers
         };
 
         // Estado da aplicação
@@ -1819,14 +1849,25 @@
             document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-            // Ativar aba selecionada
-            event.target.classList.add('active');
-            document.getElementById(tabName + 'Tab').classList.add('active');
+            // Ativar aba selecionada - usar o botão clicado
+            const clickedTab = event ? event.target : document.querySelector(`[onclick="showTab('${tabName}')"]`);
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            }
+            
+            // Mostrar conteúdo da aba
+            const tabContent = document.getElementById(tabName + 'Tab');
+            if (tabContent) {
+                tabContent.classList.add('active');
+            }
 
             // Atualizar estatísticas se for a aba de stats
             if (tabName === 'stats') {
                 updateStatsDisplay();
             }
+            
+            // Debug para verificar se a função está sendo chamada
+            console.log('Aba ativada:', tabName);
         }
 
         // Função para atualizar display das estatísticas
@@ -2098,9 +2139,12 @@
                 gameStats.balance = 200;
             }
             
-            // Mostrar aba admin sempre (para demonstração)
+            // Mostrar aba admin para administradores e influenciadores
             const adminTabBtn = document.getElementById('adminTab');
-            adminTabBtn.style.display = 'block';
+            if (adminTabBtn && (currentUserType === 'admin' || currentUserType === 'influencer')) {
+                adminTabBtn.style.display = 'block';
+                console.log('Aba Admin habilitada para:', user.name, '- Tipo:', currentUserType);
+            }
             
             const userDisplay = user.name + (currentUserType === 'influencer' ? ' ⭐' : '') + (currentUserType === 'admin' ? ' ⚙️' : '');
             document.getElementById('currentUserSelection').textContent = userDisplay;
@@ -2363,13 +2407,14 @@
             document.getElementById('currentUser').textContent = userDisplay;
             document.getElementById('balance').textContent = gameStats.balance;
             
-            // Mostrar painel admin se necessário
+            // Mostrar painel admin para administradores e influenciadores
             const gameAdminPanel = document.getElementById('gameAdminPanel');
             if (currentUserType === 'admin' || currentUserType === 'influencer') {
                 gameAdminPanel.style.display = 'block';
                 // Sincronizar valores
                 document.getElementById('gameWinRate').value = document.getElementById('selectionWinRate').value;
                 document.getElementById('gameInfluencerWinRate').value = document.getElementById('selectionInfluencerWinRate').value;
+                console.log('Painel Admin do jogo habilitado para influenciador:', currentUserType);
             } else {
                 gameAdminPanel.style.display = 'none';
             }
@@ -2391,10 +2436,11 @@
             // Sincronizar saldo
             document.getElementById('balanceSelection').textContent = gameStats.balance;
             
-            // Sincronizar configurações do admin
+            // Sincronizar configurações do admin para administradores e influenciadores
             if (currentUserType === 'admin' || currentUserType === 'influencer') {
                 document.getElementById('selectionWinRate').value = document.getElementById('gameWinRate').value;
                 document.getElementById('selectionInfluencerWinRate').value = document.getElementById('gameInfluencerWinRate').value;
+                console.log('Configurações sincronizadas para:', currentUserType);
             }
             
             // Trocar telas
@@ -3075,5 +3121,5 @@
             e.target.value = value;
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976eb49471480357',t:'MTc1NjQ5ODM2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976eca9e16d786c5',t:'MTc1NjQ5OTI3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
